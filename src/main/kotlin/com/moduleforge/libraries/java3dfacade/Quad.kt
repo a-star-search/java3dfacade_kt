@@ -12,7 +12,7 @@ internal class Quad : Polygon {
 
 	internal constructor(pointA: Point3d, pointB: Point3d, pointC: Point3d, pointD: Point3d, appearance: Appearance) :
 			  super(listOf(pointA, pointB, pointC, pointD)) {
-      val initialGeometryArray = TriangleArray(3, GeometryArray.COORDINATES)
+      val initialGeometryArray = QuadArray(4, GeometryArray.COORDINATES)
       initialGeometryArray.setCoordinate(0, pointA)
       initialGeometryArray.setCoordinate(1, pointB)
       initialGeometryArray.setCoordinate(2, pointC)
