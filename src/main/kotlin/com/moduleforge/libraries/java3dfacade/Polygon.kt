@@ -92,7 +92,7 @@ abstract class Polygon {
 		 * faces created in this way should face the same direction
 		 *
 		 */
-		fun polygonsFromPointsOnAPlane(pointsOnPlane: List<Point3d>): List<Polygon> {
+		@JvmStatic fun polygonsFromPointsOnAPlane(pointsOnPlane: List<Point3d>): List<Polygon> {
 			Preconditions.checkArgument(pointsOnPlane.size >= 3, "There should be a minimum of three vertices.")
 			Preconditions.checkArgument(allPointsAreDifferentEnough(pointsOnPlane), "Some of the vertices are equal or almost equal.")
 			Preconditions.checkArgument(inSamePlane(pointsOnPlane), "The vertices do not lay on a plane.")
