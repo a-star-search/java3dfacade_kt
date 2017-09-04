@@ -43,10 +43,10 @@ abstract class Polygon {
 	companion object {
 
 		@JvmStatic private fun makeSegments(points: List<Point3d>): Set<Pair<Point3d, Point3d>> {
-			val segments: Set<Pair<Point3d, Point3d>> = mutableSetOf()
+			val segments: MutableSet<Pair<Point3d, Point3d>> = mutableSetOf()
 			var previousPoint = points.last()
 			for (point in points) {
-				segments.plusElement(Pair(previousPoint, point))
+				segments.add(Pair(previousPoint, point))
 				previousPoint = point
 			}
 			return Collections.unmodifiableSet(segments);
