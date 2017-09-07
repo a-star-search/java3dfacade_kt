@@ -91,11 +91,17 @@ abstract class Polygon {
 		 * so that the direction of the face can be stablished. As you can suppose all
 		 * faces created in this way should face the same direction
 		 *
+		The number of polygons returned will be minimal
+		That means five points will return two polygons, one of three and another of four points
+		And six points will return two polygons, of four and four points
+		 *
 		 */
 		@JvmStatic fun polygonsFromPointsOnAPlane(pointsOnPlane: List<Point3d>): List<Polygon> {
 			Preconditions.checkArgument(pointsOnPlane.size >= 3, "There should be a minimum of three vertices.")
 			Preconditions.checkArgument(allPointsAreDifferentEnough(pointsOnPlane), "Some of the vertices are equal or almost equal.")
 			Preconditions.checkArgument(inSamePlane(pointsOnPlane), "The vertices do not lay on a plane.")
+			//TODO I should also check that no three points are in a line...
+			//TODO check the direction is consistent
 			val polygons: MutableList<Polygon> = mutableListOf()
 			polygonsFromPointsOnAPlaneRecursive(ArrayList(pointsOnPlane), polygons)
 			return polygons
