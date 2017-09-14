@@ -7,8 +7,8 @@ import javax.vecmath.Color3f
 
 internal class Triangle : Polygon {
 
-	private val geometryArray: GeometryArray
-	private val appearance: Appearance
+	override val geometryArray: GeometryArray
+	override val appearance: Appearance
 
 	internal constructor(pointA: Point3d, pointB: Point3d, pointC: Point3d, appearance: Appearance) : super(listOf(pointA, pointB, pointC)) {
       val initialGeometryArray = TriangleArray(3, GeometryArray.COORDINATES)
@@ -24,7 +24,5 @@ internal class Triangle : Polygon {
 
 	internal constructor(pointA: Point3d, pointB: Point3d, pointC: Point3d, color: Color3f) :
 			  this(pointA, pointB, pointC, makeAppearance(makeMaterial(color)))
-	
-	override protected fun initializeShape() = Shape3D(geometryArray, appearance)
 
 }

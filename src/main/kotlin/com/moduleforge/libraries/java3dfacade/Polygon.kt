@@ -7,6 +7,7 @@ import java.util.Collections
 import javax.media.j3d.Appearance
 import javax.media.j3d.GeometryArray
 import javax.media.j3d.Material
+import javax.media.j3d.PolygonAttributes
 import javax.media.j3d.Shape3D
 import javax.media.j3d.Texture
 import javax.media.j3d.Texture2D
@@ -14,17 +15,16 @@ import javax.media.j3d.TextureAttributes
 import javax.vecmath.Color3f
 import javax.vecmath.Color4f
 import javax.vecmath.Point3d
-import com.google.common.base.Preconditions
-import com.moduleforge.libraries.geometry.GeometryUtil.differentEnough
-import com.moduleforge.libraries.geometry.GeometryUtil.inSamePlane
-import java.util.Arrays
-import com.moduleforge.libraries.java3dfacade.PolygonFactory.makePolygon
 
 abstract class Polygon {
 
+	protected abstract val geometryArray: GeometryArray
+	protected abstract val appearance: Appearance
+	
 	val shape: Shape3D by lazy {
-		initializeShape()
+		Shape3D(geometryArray, appearance)
 	}
+	
 	/**
 	 * Points do have an order that determines the face direction
 	 */
@@ -37,8 +37,6 @@ abstract class Polygon {
 		this.points = ImmutableList.Builder<Point3d>().addAll(points).build();
 		segments = makeSegments(points)
 	}
-
-	protected abstract fun initializeShape(): Shape3D
 
 	companion object {
 
@@ -70,9 +68,16 @@ abstract class Polygon {
 			val texture = Texture2D()
 			texture.setBoundaryModeS(Texture.WRAP)
 			texture.setBoundaryModeT(Texture.WRAP)
-			texture.setBoundaryColor(Color4f(0.0f, 1.0f, 0.0f, 0.0f))
+			texture.setBoundaryColor(Color4f(0f, 1f, 0f, 0f))
 			appearance.setTexture(texture)
 			return appearance
+		}
+
+		@JvmStatic internal fun makeWireFrameAppearance(): Appearance {
+			val pa: PolygonAttributes = PolygonAttributes()
+			pa.setPolygonMode(PolygonAttributes.POLYGON_LINE)
+			pa.setCullFace(PolygonAttributes.CULL_NONE)
+			return Appearance().apply{setPolygonAttributes(pa)}
 		}
 
 		/**
@@ -82,61 +87,6 @@ abstract class Polygon {
 			val black: Color3f = Color3f(0.0f, 0.0f, 0.0f)
 			val white: Color3f = Color3f(1.0f, 1.0f, 1.0f)
 			return Material(color, black, color, white, 70f)
-		}
-
-		/**
-		 * The faces created are all connected to each other.
-		 *
-		 * All the vertices must lay on the same plane. They must also have an ordering,
-		 * so that the direction of the face can be stablished. As you can suppose all
-		 * faces created in this way should face the same direction
-		 *
-		The number of polygons returned will be minimal
-		That means five points will return two polygons, one of three and another of four points
-		And six points will return two polygons, of four and four points
-		 *
-		 */
-		@JvmStatic fun polygonsFromPointsOnAPlane(pointsOnPlane: List<Point3d>): List<Polygon> {
-			Preconditions.checkArgument(pointsOnPlane.size >= 3, "There should be a minimum of three vertices.")
-			Preconditions.checkArgument(allPointsAreDifferentEnough(pointsOnPlane), "Some of the vertices are equal or almost equal.")
-			Preconditions.checkArgument(inSamePlane(pointsOnPlane), "The vertices do not lay on a plane.")
-			//TODO I should also check that no three points are in a line...
-			//TODO check the direction is consistent
-			val polygons: MutableList<Polygon> = mutableListOf()
-			polygonsFromPointsOnAPlaneRecursive(ArrayList(pointsOnPlane), polygons)
-			return polygons
-		}
-
-		private fun allPointsAreDifferentEnough(points: List<Point3d>): Boolean {
-			for ((index, outerLoopPoint) in points.withIndex())
-				for (innerLoopPoint in points.subList(index + 1, points.size))
-					if (!differentEnough(outerLoopPoint, innerLoopPoint)) return false
-			return true
-		}
-
-		private fun polygonsFromPointsOnAPlaneRecursive(points: MutableList<Point3d>, polygons: MutableList<Polygon>) {
-			val pointsNewPolygon = makePointListNextPolygon(points)
-			polygons.add(makePolygon(pointsNewPolygon))
-			val morePolygons = points.size > 4
-			if (morePolygons) {
-				cullPointList(points, pointsNewPolygon.size)
-				polygonsFromPointsOnAPlaneRecursive(points, polygons)
-			}
-		}
-
-		private fun makePointListNextPolygon(points: List<Point3d>): List<Point3d> {
-			//a polygon is made of either three or four elements
-			return if (points.size == 3)
-				listOf(points.get(0), points.get(1), points.get(2))
-			else
-				listOf(points.get(0), points.get(1), points.get(2), points.get(3))
-		}
-
-		private fun cullPointList(points: MutableList<Point3d>, pointCountOfLastPolygon: Int) {
-			val fromIndex = 1 //the first element is not removed, as it is part of the next polygon
-			val removeCount = if ((pointCountOfLastPolygon == 3)) 1 else 2 //remove one if a triangle was made, two if it was a quad
-			val toIndex = fromIndex + removeCount
-			points.subList(fromIndex, toIndex).clear()
 		}
 	}
 

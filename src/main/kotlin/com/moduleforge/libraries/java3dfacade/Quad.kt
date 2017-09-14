@@ -7,8 +7,8 @@ import javax.vecmath.Color3f
 
 internal class Quad : Polygon {
 
-	private val geometryArray: GeometryArray
-	private val appearance: Appearance
+	override val geometryArray: GeometryArray
+	override val appearance: Appearance
 
 	internal constructor(pointA: Point3d, pointB: Point3d, pointC: Point3d, pointD: Point3d, appearance: Appearance) :
 			  super(listOf(pointA, pointB, pointC, pointD)) {
@@ -26,7 +26,5 @@ internal class Quad : Polygon {
 
 	internal constructor(pointA: Point3d, pointB: Point3d, pointC: Point3d, pointD: Point3d, color: Color3f) :
 			  this(pointA, pointB, pointC, pointD, makeAppearance(makeMaterial(color)))
-	
-	override protected fun initializeShape() = Shape3D(geometryArray, appearance)
 
 }
