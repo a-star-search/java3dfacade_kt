@@ -19,7 +19,7 @@ import javax.vecmath.Point3d
 abstract class Polygon {
 
 	protected abstract val geometryArray: GeometryArray
-	protected abstract val appearance: Appearance
+	abstract val appearance: Appearance
 	
 	val shape: Shape3D by lazy {
 		Shape3D(geometryArray, appearance)
