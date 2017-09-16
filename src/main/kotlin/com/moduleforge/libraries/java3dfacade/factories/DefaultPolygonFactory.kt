@@ -24,33 +24,33 @@ object DefaultPolygonFactory: PolygonFactory {
 	override fun makePolygon(color: Color3f, points: List<Point3d>): Polygon = makePolygon(color, *points.toTypedArray())
 
 	override fun makePolygon(vararg points: Point3d): Polygon {
-		if (points.size < 3 || points.size > 4) {
+		if (points.size < 3) {
 			throw IllegalArgumentException("Wrong number of points.")
 		}
 		return if (points.size == 3) {
 			Triangle(points[0], points[1], points[2])
 		} else {
-			Quad(points[0], points[1], points[2], points[3])
+			PolygonImpl(points.toList())
 		}
 	}
 
 	override fun makePolygon(appearance: Appearance, vararg points: Point3d): Polygon {
-		if (points.size < 3 || points.size > 4) 
+		if (points.size < 3) 
 			throw IllegalArgumentException("Wrong number of points.")
 		return if (points.size == 3) {
 			Triangle(points[0], points[1], points[2], appearance)
 		} else {
-			Quad(points[0], points[1], points[2], points[3], appearance)
+			PolygonImpl(points.toList(), appearance)
 		}
 	}
 
 	override fun makePolygon(color: Color3f, vararg points: Point3d): Polygon {
-		if (points.size < 3 || points.size > 4) 
+		if (points.size < 3) 
 			throw IllegalArgumentException("Wrong number of points.")
 		return if (points.size == 3) {
 			 Triangle(points[0], points[1], points[2], color)
 		} else {
-			Quad(points[0], points[1], points[2], points[3], color)
+			PolygonImpl(points.toList(), color)
 		}
 	}
 

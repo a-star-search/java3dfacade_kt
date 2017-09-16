@@ -1,9 +1,9 @@
 package com.moduleforge.libraries.java3dfacade
 
+import com.moduleforge.libraries.java3dfacade.Polygon.Companion.makeWireFrameAppearance
 import javax.media.j3d.Appearance
 import javax.vecmath.Color3f
 import javax.vecmath.Point3d
-import com.moduleforge.libraries.java3dfacade.Polygon.Companion.makeWireFrameAppearance
 
 /**
  * When making a polygon (triangle or quad) the order of points determines the direction of the
@@ -25,32 +25,32 @@ object WireFramePolygonFactory : PolygonFactory {
 	override fun makePolygon(color: Color3f, points: List<Point3d>) = makePolygon(color, *points.toTypedArray())
 
 	override fun makePolygon(vararg points: Point3d): Polygon {
-		if (points.size < 3 || points.size > 4) 
+		if (points.size < 3) 
 			throw IllegalArgumentException("Wrong number of points.")
 		return if (points.size == 3) {
 			Triangle(points[0], points[1], points[2], makeWireFrameAppearance())
 		}else{
-			Quad(points[0], points[1], points[2], points[3], makeWireFrameAppearance())
+			PolygonImpl(points.toList(), makeWireFrameAppearance())
 		} 
 	}
 
 	override fun makePolygon(appearance: Appearance, vararg points: Point3d): Polygon {
-		if (points.size < 3 || points.size > 4) 
+		if (points.size < 3) 
 			throw IllegalArgumentException("Wrong number of points.")
 		return if (points.size == 3) {
 			Triangle(points[0], points[1], points[2], makeWireFrameAppearance())
 		} else {
-			Quad(points[0], points[1], points[2], points[3], makeWireFrameAppearance())
+			PolygonImpl(points.toList(), makeWireFrameAppearance())
 		}
 	}
 
 	override fun makePolygon(color: Color3f, vararg points: Point3d): Polygon {
-		if (points.size < 3 || points.size > 4) 
+		if (points.size < 3) 
 			throw IllegalArgumentException("Wrong number of points.")
 		return if (points.size == 3) {
 			Triangle(points[0], points[1], points[2], makeWireFrameAppearance())
 		}else{
-		   Quad(points[0], points[1], points[2], points[3], makeWireFrameAppearance())
+			PolygonImpl(points.toList(), makeWireFrameAppearance())
 		}
 	}
 }

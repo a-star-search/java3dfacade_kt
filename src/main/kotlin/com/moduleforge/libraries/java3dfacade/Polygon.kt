@@ -34,7 +34,7 @@ abstract class Polygon {
 	protected constructor(points: List<Point3d>) {
 		if (points.size < 3)
 			throw IllegalArgumentException("Too few points to build a polygon.")
-		this.points = ImmutableList.Builder<Point3d>().addAll(points).build();
+		this.points = ImmutableList.copyOf(points)
 		segments = makeSegments(points)
 	}
 
