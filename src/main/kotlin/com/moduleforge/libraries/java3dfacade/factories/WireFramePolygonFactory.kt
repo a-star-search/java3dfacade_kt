@@ -4,6 +4,7 @@ import com.moduleforge.libraries.java3dfacade.Polygon.Companion.makeWireFrameApp
 import javax.media.j3d.Appearance
 import javax.vecmath.Color3f
 import javax.vecmath.Point3d
+import java.awt.Color
 
 /**
  * When making a polygon (triangle or quad) the order of points determines the direction of the
@@ -17,6 +18,8 @@ import javax.vecmath.Point3d
  * 
  */
 object WireFramePolygonFactory : PolygonFactory {
+	
+	override fun makePolygon(color: Color, points: List<Point3d>): Polygon = makePolygon(Color3f(color), points)  
 
 	override fun makePolygon(points: List<Point3d>) = makePolygon(*points.toTypedArray())
 
@@ -33,6 +36,8 @@ object WireFramePolygonFactory : PolygonFactory {
 			PolygonImpl(points.toList(), makeWireFrameAppearance())
 		} 
 	}
+
+	override fun makePolygon(color: Color, vararg points: Point3d): Polygon = makePolygon(Color3f(color), *points) 
 
 	override fun makePolygon(appearance: Appearance, vararg points: Point3d): Polygon {
 		if (points.size < 3) 

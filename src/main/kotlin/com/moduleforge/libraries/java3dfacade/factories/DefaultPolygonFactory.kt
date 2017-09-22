@@ -1,5 +1,6 @@
 package com.moduleforge.libraries.java3dfacade
 
+import java.awt.Color
 import javax.media.j3d.Appearance
 import javax.vecmath.Color3f
 import javax.vecmath.Point3d
@@ -21,6 +22,8 @@ object DefaultPolygonFactory: PolygonFactory {
 
 	override fun makePolygon(appearance: Appearance, points: List<Point3d>): Polygon = makePolygon(appearance, *points.toTypedArray())
 
+	override fun makePolygon(color: Color, points: List<Point3d>): Polygon = makePolygon(Color3f(color), *points.toTypedArray())
+	
 	override fun makePolygon(color: Color3f, points: List<Point3d>): Polygon = makePolygon(color, *points.toTypedArray())
 
 	override fun makePolygon(vararg points: Point3d): Polygon {
@@ -43,6 +46,8 @@ object DefaultPolygonFactory: PolygonFactory {
 			PolygonImpl(points.toList(), appearance)
 		}
 	}
+	
+	override fun makePolygon(color: Color, vararg points: Point3d): Polygon = makePolygon(Color3f(color), *points) 
 
 	override fun makePolygon(color: Color3f, vararg points: Point3d): Polygon {
 		if (points.size < 3) 
