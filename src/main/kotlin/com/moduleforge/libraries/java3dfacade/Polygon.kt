@@ -51,9 +51,8 @@ abstract class Polygon {
 		}
 
 		@JvmStatic protected fun generateNormals(ga: GeometryArray): GeometryInfo {
-			val geometryInfo: GeometryInfo = GeometryInfo(ga)
-			val ng: NormalGenerator = NormalGenerator()
-			ng.generateNormals(geometryInfo)
+			val geometryInfo = GeometryInfo(ga)
+			NormalGenerator().generateNormals(geometryInfo)
 			return geometryInfo
 		}
 
@@ -61,22 +60,22 @@ abstract class Polygon {
 
 		@JvmStatic protected fun makeAppearance(material: Material): Appearance {
 			val texAttr = TextureAttributes()
-			texAttr.setTextureMode(TextureAttributes.MODULATE)
+			texAttr.textureMode = TextureAttributes.MODULATE
 			val appearance = Appearance()
-			appearance.setTextureAttributes(texAttr)
-			appearance.setMaterial(material)
+			appearance.textureAttributes = texAttr
+			appearance.material = material
 			val texture = Texture2D()
-			texture.setBoundaryModeS(Texture.WRAP)
-			texture.setBoundaryModeT(Texture.WRAP)
+			texture.boundaryModeS = Texture.WRAP
+			texture.boundaryModeT = Texture.WRAP
 			texture.setBoundaryColor(Color4f(0f, 1f, 0f, 0f))
-			appearance.setTexture(texture)
+			appearance.texture = texture
 			return appearance
 		}
 
 		@JvmStatic internal fun makeWireFrameAppearance(): Appearance {
-			val pa: PolygonAttributes = PolygonAttributes()
-			pa.setPolygonMode(PolygonAttributes.POLYGON_LINE)
-			pa.setCullFace(PolygonAttributes.CULL_NONE)
+			val pa = PolygonAttributes()
+			pa.polygonMode = PolygonAttributes.POLYGON_LINE
+			pa.cullFace = PolygonAttributes.CULL_NONE
 			return Appearance().apply{setPolygonAttributes(pa)}
 		}
 
@@ -84,8 +83,8 @@ abstract class Polygon {
 		 * default color is white
 		 */
 		@JvmStatic protected fun makeMaterial(color: Color3f = Color3f(1.0f, 1.0f, 1.0f)): Material {
-			val black: Color3f = Color3f(0.0f, 0.0f, 0.0f)
-			val white: Color3f = Color3f(1.0f, 1.0f, 1.0f)
+			val black = Color3f(0.0f, 0.0f, 0.0f)
+			val white = Color3f(1.0f, 1.0f, 1.0f)
 			return Material(color, black, color, white, 70f)
 		}
 	}

@@ -17,7 +17,7 @@ internal class PolygonImpl : Polygon {
 		for ((index, elem) in points.withIndex()) {
 			initialGeometryArray.setCoordinate(index, elem)
 		}
-		geometryArray = generateNormals(initialGeometryArray).getGeometryArray()
+		geometryArray = generateNormals(initialGeometryArray).geometryArray
 		this.appearance = appearance
 	}
 
