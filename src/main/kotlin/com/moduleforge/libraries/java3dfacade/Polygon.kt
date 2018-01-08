@@ -1,6 +1,7 @@
 package com.moduleforge.libraries.java3dfacade
 
 import com.google.common.collect.ImmutableList
+import com.moduleforge.libraries.geometry.GeometryUtil.almostZero
 import com.sun.j3d.utils.geometry.GeometryInfo
 import com.sun.j3d.utils.geometry.NormalGenerator
 import java.util.Collections
@@ -15,28 +16,43 @@ import javax.media.j3d.TextureAttributes
 import javax.vecmath.Color3f
 import javax.vecmath.Color4f
 import javax.vecmath.Point3d
+import org.locationtech.jts.geom.Coordinate as JTSCoordinate
+import org.locationtech.jts.geom.GeometryFactory as JTSGeometryFactory
+import org.locationtech.jts.geom.Polygon as JTSPolygon
 
-abstract class Polygon {
+abstract class Polygon protected constructor(points: List<Point3d>) {
 
 	protected abstract val geometryArray: GeometryArray
 	abstract val appearance: Appearance
-	
-	val shape: Shape3D by lazy {
-		Shape3D(geometryArray, appearance)
-	}
-	
+
 	/**
 	 * Points do have an order that determines the face direction
 	 */
 	val points: List<Point3d>
 	val segments: Set<Pair<Point3d, Point3d>>
+   private val jtsPolygon: JTSPolygon
+   val shape: Shape3D by lazy {
+      Shape3D(geometryArray, appearance)
+   }
 
-	protected constructor(points: List<Point3d>) {
-		if (points.size < 3)
-			throw IllegalArgumentException("Too few points to build a polygon.")
-		this.points = ImmutableList.copyOf(points)
-		segments = makeSegments(points)
-	}
+   private fun toJTSPolygon(points: List<Point3d>): JTSPolygon {
+      val coords = points.map { JTSCoordinate(it.x, it.y, it.z) }.toMutableList()
+      val first = points[0]
+      coords.add(JTSCoordinate(first.x, first.y, first.z)) //append the first point to close the polygon
+      return JTSGeometryFactory().createPolygon(coords.toTypedArray())
+   }
+
+	/**
+	 * Determine if this polygon intersects another in the same plane.
+    *
+    * If the polygon crosses in a different plane or if they share a border (either on the same plane
+    * or in a different plane) the method returns false.
+	 */
+   fun isThereIntersection(other: Polygon): Boolean {
+      val intersectionArea =  jtsPolygon.intersection(other.jtsPolygon).area
+      val intersectionInLinearUnits = Math.sqrt(intersectionArea)
+      return !almostZero(intersectionInLinearUnits)
+   }
 
 	companion object {
 
@@ -88,5 +104,13 @@ abstract class Polygon {
 			return Material(color, black, color, white, 70f)
 		}
 	}
+
+   init {
+      if (points.size < 3)
+         throw IllegalArgumentException("Too few points to build a polygon.")
+      this.points = ImmutableList.copyOf(points)
+      segments = makeSegments(points)
+      jtsPolygon = toJTSPolygon(points)
+   }
 
 }
