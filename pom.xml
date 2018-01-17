@@ -8,7 +8,7 @@
 	<name>java3dfacadeinkotlin</name>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<kotlin.version>1.2.10</kotlin.version>
+		<kotlin.version>1.2.20</kotlin.version>
 	</properties>
 	<repositories>
 		<repository>

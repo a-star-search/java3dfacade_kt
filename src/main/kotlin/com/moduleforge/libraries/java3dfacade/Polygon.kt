@@ -1,9 +1,11 @@
 package com.moduleforge.libraries.java3dfacade
 
 import com.google.common.collect.ImmutableList
-import com.moduleforge.libraries.geometry.GeometryUtil.almostZero
+import com.moduleforge.libraries.geometry.GeometryUtil
+import com.moduleforge.libraries.geometry.GeometryUtil.*
 import com.sun.j3d.utils.geometry.GeometryInfo
 import com.sun.j3d.utils.geometry.NormalGenerator
+import java.lang.Math.sqrt
 import java.util.Collections
 import javax.media.j3d.Appearance
 import javax.media.j3d.GeometryArray
@@ -49,10 +51,18 @@ abstract class Polygon protected constructor(points: List<Point3d>) {
     * or in a different plane) the method returns false.
 	 */
    fun isThereIntersection(other: Polygon): Boolean {
-      val intersectionArea =  jtsPolygon.intersection(other.jtsPolygon).area
-      val intersectionInLinearUnits = Math.sqrt(intersectionArea)
+      val intersection =  jtsPolygon.intersection(other.jtsPolygon).area
+      val intersectionInLinearUnits = sqrt(intersection)
       return !almostZero(intersectionInLinearUnits)
    }
+
+	fun areaExactlyMatch(other: Polygon): Boolean {
+      val intersection = jtsPolygon.intersection(other.jtsPolygon).area
+      val diffArea = intersection - jtsPolygon.area
+      val diffAreaInLinearUnits = sqrt(diffArea)
+      return almostZero(diffAreaInLinearUnits)
+   }
+
 
 	companion object {
 
