@@ -1,8 +1,7 @@
 package com.moduleforge.libraries.java3dfacade
 
 import com.google.common.collect.ImmutableList
-import com.moduleforge.libraries.geometry.GeometryUtil
-import com.moduleforge.libraries.geometry.GeometryUtil.*
+import com.moduleforge.libraries.geometry.Geometry.*
 import com.sun.j3d.utils.geometry.GeometryInfo
 import com.sun.j3d.utils.geometry.NormalGenerator
 import java.lang.Math.sqrt

@@ -3,9 +3,6 @@ package com.moduleforge.libraries.java3dfacade
 import javax.media.j3d.Appearance
 import javax.vecmath.Color3f
 import javax.vecmath.Point3d
-import com.google.common.base.Preconditions.checkArgument
-import com.moduleforge.libraries.geometry.GeometryUtil.differentEnough
-import com.moduleforge.libraries.geometry.GeometryUtil.inSamePlane
 import java.awt.Color
 
 interface PolygonFactory {
