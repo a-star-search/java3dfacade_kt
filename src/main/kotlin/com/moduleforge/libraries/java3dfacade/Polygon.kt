@@ -2,6 +2,7 @@ package com.moduleforge.libraries.java3dfacade
 
 import com.google.common.collect.ImmutableList
 import com.moduleforge.libraries.geometry.Geometry.*
+import com.moduleforge.libraries.geometry._3d.Point
 import com.sun.j3d.utils.geometry.GeometryInfo
 import com.sun.j3d.utils.geometry.NormalGenerator
 import java.lang.Math.sqrt
@@ -16,12 +17,11 @@ import javax.media.j3d.Texture2D
 import javax.media.j3d.TextureAttributes
 import javax.vecmath.Color3f
 import javax.vecmath.Color4f
-import javax.vecmath.Point3d
 import org.locationtech.jts.geom.Coordinate as JTSCoordinate
 import org.locationtech.jts.geom.GeometryFactory as JTSGeometryFactory
 import org.locationtech.jts.geom.Polygon as JTSPolygon
 
-abstract class Polygon protected constructor(points: List<Point3d>) {
+abstract class Polygon protected constructor(points: List<Point>) {
 
 	protected abstract val geometryArray: GeometryArray
 	abstract val appearance: Appearance
@@ -29,17 +29,17 @@ abstract class Polygon protected constructor(points: List<Point3d>) {
 	/**
 	 * Points do have an order that determines the face direction
 	 */
-	val points: List<Point3d>
-	val segments: Set<Pair<Point3d, Point3d>>
+	val points: List<Point>
+	val segments: Set<Pair<Point, Point>>
    private val jtsPolygon: JTSPolygon
    val shape: Shape3D by lazy {
       Shape3D(geometryArray, appearance)
    }
 
-   private fun toJTSPolygon(points: List<Point3d>): JTSPolygon {
-      val coords = points.map { JTSCoordinate(it.x, it.y, it.z) }.toMutableList()
+   private fun toJTSPolygon(points: List<Point>): JTSPolygon {
+      val coords = points.map { JTSCoordinate(it.x(), it.y(), it.z()) }.toMutableList()
       val first = points[0]
-      coords.add(JTSCoordinate(first.x, first.y, first.z)) //append the first point to close the polygon
+      coords.add(JTSCoordinate(first.x(), first.y(), first.z())) //append the first point to close the polygon
       return JTSGeometryFactory().createPolygon(coords.toTypedArray())
    }
 
@@ -65,8 +65,8 @@ abstract class Polygon protected constructor(points: List<Point3d>) {
 
 	companion object {
 
-		@JvmStatic private fun makeSegments(points: List<Point3d>): Set<Pair<Point3d, Point3d>> {
-			val segments: MutableSet<Pair<Point3d, Point3d>> = mutableSetOf()
+		@JvmStatic private fun makeSegments(points: List<Point>): Set<Pair<Point, Point>> {
+			val segments: MutableSet<Pair<Point, Point>> = mutableSetOf()
 			var previousPoint = points.last()
 			for (point in points) {
 				segments.add(Pair(previousPoint, point))

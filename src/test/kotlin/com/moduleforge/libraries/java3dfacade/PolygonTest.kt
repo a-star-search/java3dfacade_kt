@@ -1,9 +1,9 @@
 package com.moduleforge.libraries.java3dfacade
 
+import com.moduleforge.libraries.geometry._3d.Point
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
-import javax.vecmath.Point3d
 
 /**
  * visualize points if necessary on https://technology.cpm.org/general/3dgraph/
@@ -23,60 +23,26 @@ class PolygonTest {
 
    @Before
    fun setUp(){
-      triangleOnXY = PolygonImpl(
-              listOf (Point3d(0.0, 0.0, 0.0),
-                      Point3d(10.0, 0.0, 0.0),
-                      Point3d(5.0, 10.0, 0.0)))
-
-      nonIntersectingTriangle = PolygonImpl(
-              listOf (Point3d(100.0, 100.0, 0.0),
-                      Point3d(101.0, 100.0, 0.0),
-                      Point3d(101.0, 101.0, 0.0)))
-
-      nonIntersectingSharingASide = PolygonImpl(
-              listOf (Point3d(10.0, 0.0, 0.0),
-                      Point3d(5.0, 10.0, 0.0),
-                      Point3d(20.0, 20.0, 0.0)))
-
-      intersectingTriangleOnXY = PolygonImpl(
-              listOf (Point3d(5.0, 0.0, 0.0),
-                      Point3d(15.0, 0.0, 0.0),
-                      Point3d(10.0, 10.0, 0.0)))
-
-      intersectingTriangleFacingOppositeOnXY = PolygonImpl(
-              listOf ( Point3d(5.0, 0.0, 0.0),
-                      Point3d(10.0, 10.0, 0.0),
-                      Point3d(15.0, 0.0, 0.0)))
-
+      triangleOnXY = PolygonImpl(listOf(Point(0, 0,0), Point(10, 0, 0), Point(5,10,0)))
+      nonIntersectingTriangle = PolygonImpl(listOf(Point(100,100, 0), Point(101, 100,0), Point(101,101,0)))
+      nonIntersectingSharingASide = PolygonImpl(listOf(Point(10,0, 0), Point(5, 10, 0), Point(20,20,0)))
+      intersectingTriangleOnXY = PolygonImpl(listOf(Point(5,0,0), Point(15, 0, 0), Point(10, 10, 0)))
+      intersectingTriangleFacingOppositeOnXY = PolygonImpl(listOf(Point(5,0,0), Point(10,10,0), Point(15,0,0)))
       //plane equation: 4x - 7y + 4z = 25
-      triangleOnRandomPlane = PolygonImpl(
-              listOf ( Point3d(1.0, 1.0, 7.0),
-                      Point3d(2.0, 2.0, 7.75),
-                      Point3d(0.0, 2.0, 9.75)))
+      triangleOnRandomPlane = PolygonImpl(listOf(Point(1,1,7), Point(2, 2,7.75), Point(0,2,9.75)))
       intersectingTriangleOnRandomPlane = PolygonImpl(
-              listOf ( Point3d(1.5, 1.5, 7.375),
-                      Point3d(3.0, 3.0, 8.5),
-                      Point3d(2.0, 3.0, 9.5)))
+              listOf(Point(1.5, 1.5, 7.375), Point(3, 3, 8.5), Point(2, 3, 9.5)))
       nonIntersectingTriangleOnRandomPlane = PolygonImpl(
-              listOf ( Point3d(3.0, 3.0, 8.5),
-                      Point3d(2.0, 3.0, 9.5),
-                      Point3d(5.0, 4.0, 8.25)))
+              listOf ( Point(3, 3, 8.5), Point(2, 3, 9.5), Point(5, 4, 8.25)))
       concavePolygon = PolygonImpl(
-              listOf ( Point3d(0.0, 0.0, 0.0),
-                      Point3d(10.0, 0.0, 0.0),
-                      Point3d(10.0, 2.0, 0.0),
-                      Point3d(5.0, 2.0, 0.0),
-                      Point3d(5.0, 8.0, 0.0),
-                      Point3d(10.0, 8.0, 0.0),
-                      Point3d(10.0, 10.0, 0.0),
-                      Point3d(0.0, 10.0, 0.0) ))
+              listOf ( Point(0, 0, 0), Point(10, 0, 0), Point(10, 2, 0), Point(5, 2, 0),
+                      Point(5, 8, 0), Point(10, 8, 0), Point(10, 10, 0), Point(0, 10, 0) ))
       polygonInsideGapOfConcavePolygonButNotIntersected = PolygonImpl(
-              listOf(javax.vecmath.Point3d(6.0, 3.0, 0.0),
-                      javax.vecmath.Point3d(8.0, 3.0, 0.0),
-                      javax.vecmath.Point3d(8.0, 4.0, 0.0),
-                      javax.vecmath.Point3d(6.0, 4.0, 0.0)))
+              listOf(Point(6, 3, 0),
+                      Point(8, 3, 0),
+                      Point(8, 4, 0),
+                      Point(6, 4, 0)))
    }
-
    @Test
    fun simpleCases(){
       assertTrue(triangleOnXY.isThereIntersection(intersectingTriangleOnXY))
@@ -86,7 +52,6 @@ class PolygonTest {
       assertFalse(triangleOnXY.isThereIntersection(nonIntersectingSharingASide))
       assertFalse(triangleOnRandomPlane.isThereIntersection(nonIntersectingTriangleOnRandomPlane))
    }
-
    @Test
    fun concavePolygon(){
       assertFalse(concavePolygon.isThereIntersection(polygonInsideGapOfConcavePolygonButNotIntersected))

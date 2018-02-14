@@ -1,9 +1,12 @@
-package com.moduleforge.libraries.java3dfacade
+package com.moduleforge.libraries.java3dfacade.factories
 
+import com.moduleforge.libraries.geometry._3d.Point
+import com.moduleforge.libraries.java3dfacade.Polygon
+import com.moduleforge.libraries.java3dfacade.PolygonImpl
+import com.moduleforge.libraries.java3dfacade.Triangle
 import java.awt.Color
 import javax.media.j3d.Appearance
 import javax.vecmath.Color3f
-import javax.vecmath.Point3d
 
 /**
  * When making a polygon (triangle or quad) the order of points determines the direction of the
@@ -17,16 +20,11 @@ import javax.vecmath.Point3d
  * 
  */
 object DefaultPolygonFactory: PolygonFactory {
-
-	override fun makePolygon(points: List<Point3d>) = makePolygon(*points.toTypedArray())
-
-	override fun makePolygon(appearance: Appearance, points: List<Point3d>): Polygon = makePolygon(appearance, *points.toTypedArray())
-
-	override fun makePolygon(color: Color, points: List<Point3d>): Polygon = makePolygon(Color3f(color), *points.toTypedArray())
-	
-	override fun makePolygon(color: Color3f, points: List<Point3d>): Polygon = makePolygon(color, *points.toTypedArray())
-
-	override fun makePolygon(vararg points: Point3d): Polygon {
+	override fun makePolygon(points: List<Point>) = makePolygon(*points.toTypedArray())
+	override fun makePolygon(appearance: Appearance, points: List<Point>): Polygon = makePolygon(appearance, *points.toTypedArray())
+	override fun makePolygon(color: Color, points: List<Point>): Polygon = makePolygon(Color3f(color), *points.toTypedArray())
+	override fun makePolygon(color: Color3f, points: List<Point>): Polygon = makePolygon(color, *points.toTypedArray())
+	override fun makePolygon(vararg points: Point): Polygon {
 		if (points.size < 3) {
 			throw IllegalArgumentException("Wrong number of points.")
 		}
@@ -36,8 +34,7 @@ object DefaultPolygonFactory: PolygonFactory {
 			PolygonImpl(points.toList())
 		}
 	}
-
-	override fun makePolygon(appearance: Appearance, vararg points: Point3d): Polygon {
+	override fun makePolygon(appearance: Appearance, vararg points: Point): Polygon {
 		if (points.size < 3) 
 			throw IllegalArgumentException("Wrong number of points.")
 		return if (points.size == 3) {
@@ -46,17 +43,14 @@ object DefaultPolygonFactory: PolygonFactory {
 			PolygonImpl(points.toList(), appearance)
 		}
 	}
-	
-	override fun makePolygon(color: Color, vararg points: Point3d): Polygon = makePolygon(Color3f(color), *points) 
-
-	override fun makePolygon(color: Color3f, vararg points: Point3d): Polygon {
+	override fun makePolygon(color: Color, vararg points: Point): Polygon = makePolygon(Color3f(color), *points)
+	override fun makePolygon(color: Color3f, vararg points: Point): Polygon {
 		if (points.size < 3) 
 			throw IllegalArgumentException("Wrong number of points.")
-		return if (points.size == 3) {
-			 Triangle(points[0], points[1], points[2], color)
-		} else {
-			PolygonImpl(points.toList(), color)
-		}
+		return if (points.size == 3)
+			 	Triangle(points[0], points[1], points[2], color)
+			else
+				PolygonImpl(points.toList(), color)
 	}
 
 }

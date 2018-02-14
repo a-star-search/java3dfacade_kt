@@ -1,28 +1,25 @@
 package com.moduleforge.libraries.java3dfacade
 
-import javax.vecmath.Point3d
-import javax.media.j3d.*
-import com.sun.j3d.utils.geometry.GeometryInfo;
+import com.moduleforge.libraries.geometry._3d.Point
+import javax.media.j3d.Appearance
+import javax.media.j3d.GeometryArray
+import javax.media.j3d.GeometryArray.COORDINATES
+import javax.media.j3d.TriangleArray
 import javax.vecmath.Color3f
 
 internal class Triangle : Polygon {
-
 	override val geometryArray: GeometryArray
 	override val appearance: Appearance
-
-	internal constructor(pointA: Point3d, pointB: Point3d, pointC: Point3d, appearance: Appearance) : super(listOf(pointA, pointB, pointC)) {
-      val initialGeometryArray = TriangleArray(3, GeometryArray.COORDINATES)
-      initialGeometryArray.setCoordinate(0, pointA)
-      initialGeometryArray.setCoordinate(1, pointB)
-      initialGeometryArray.setCoordinate(2, pointC)
+	internal constructor(pointA: Point, pointB: Point, pointC: Point, appearance: Appearance) : super(listOf(pointA, pointB, pointC)) {
+      val initialGeometryArray = TriangleArray(3, COORDINATES)
+      initialGeometryArray.setCoordinate(0, pointA.asJ3DPoint())
+      initialGeometryArray.setCoordinate(1, pointB.asJ3DPoint())
+      initialGeometryArray.setCoordinate(2, pointC.asJ3DPoint())
 		geometryArray = generateNormals(initialGeometryArray).getGeometryArray()
 		this.appearance = appearance
 	}
-
-	internal constructor(pointA: Point3d, pointB: Point3d, pointC: Point3d) :
+	internal constructor(pointA: Point, pointB: Point, pointC: Point) :
 			  this(pointA, pointB, pointC, makeDefaultAppearance())
-
-	internal constructor(pointA: Point3d, pointB: Point3d, pointC: Point3d, color: Color3f) :
+	internal constructor(pointA: Point, pointB: Point, pointC: Point, color: Color3f) :
 			  this(pointA, pointB, pointC, makeAppearance(makeMaterial(color)))
-
 }
