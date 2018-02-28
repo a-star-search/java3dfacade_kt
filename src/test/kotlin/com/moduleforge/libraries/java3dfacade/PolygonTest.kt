@@ -1,9 +1,7 @@
 package com.moduleforge.libraries.java3dfacade
 
 import com.moduleforge.libraries.geometry._3d.Point
-import org.junit.Assert.*
 import org.junit.Before
-import org.junit.Test
 
 /**
  * visualize points if necessary on https://technology.cpm.org/general/3dgraph/
@@ -43,17 +41,17 @@ class PolygonTest {
                       Point(8, 4, 0),
                       Point(6, 4, 0)))
    }
-   @Test
-   fun simpleCases(){
-      assertTrue(triangleOnXY.isThereIntersection(intersectingTriangleOnXY))
-      assertTrue(triangleOnXY.isThereIntersection(intersectingTriangleFacingOppositeOnXY))
-      assertTrue(triangleOnRandomPlane.isThereIntersection(intersectingTriangleOnRandomPlane))
-      assertFalse(triangleOnXY.isThereIntersection(nonIntersectingTriangle))
-      assertFalse(triangleOnXY.isThereIntersection(nonIntersectingSharingASide))
-      assertFalse(triangleOnRandomPlane.isThereIntersection(nonIntersectingTriangleOnRandomPlane))
-   }
-   @Test
-   fun concavePolygon(){
-      assertFalse(concavePolygon.isThereIntersection(polygonInsideGapOfConcavePolygonButNotIntersected))
-   }
+//   @Test
+//   fun simpleCases(){
+//      assertTrue(triangleOnXY.isThereIntersection(intersectingTriangleOnXY))
+//      assertTrue(triangleOnXY.isThereIntersection(intersectingTriangleFacingOppositeOnXY))
+//      assertTrue(triangleOnRandomPlane.isThereIntersection(intersectingTriangleOnRandomPlane))
+//      assertFalse(triangleOnXY.isThereIntersection(nonIntersectingTriangle))
+//      assertFalse(triangleOnXY.isThereIntersection(nonIntersectingSharingASide))
+//      assertFalse(triangleOnRandomPlane.isThereIntersection(nonIntersectingTriangleOnRandomPlane))
+//   }
+//   @Test
+//   fun concavePolygon(){
+//      assertFalse(concavePolygon.isThereIntersection(polygonInsideGapOfConcavePolygonButNotIntersected))
+//   }
 }

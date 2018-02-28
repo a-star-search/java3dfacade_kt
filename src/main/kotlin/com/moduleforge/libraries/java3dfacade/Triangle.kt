@@ -12,9 +12,9 @@ internal class Triangle : Polygon {
 	override val appearance: Appearance
 	internal constructor(pointA: Point, pointB: Point, pointC: Point, appearance: Appearance) : super(listOf(pointA, pointB, pointC)) {
       val initialGeometryArray = TriangleArray(3, COORDINATES)
-      initialGeometryArray.setCoordinate(0, pointA.asJ3DPoint())
-      initialGeometryArray.setCoordinate(1, pointB.asJ3DPoint())
-      initialGeometryArray.setCoordinate(2, pointC.asJ3DPoint())
+      initialGeometryArray.setCoordinate(0, asJ3DPoint(pointA))
+      initialGeometryArray.setCoordinate(1, asJ3DPoint(pointB))
+      initialGeometryArray.setCoordinate(2, asJ3DPoint(pointC))
 		geometryArray = generateNormals(initialGeometryArray).getGeometryArray()
 		this.appearance = appearance
 	}
